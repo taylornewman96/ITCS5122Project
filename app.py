@@ -8,9 +8,20 @@ def load_clf_model():
     loaded_model = pickle.load(open(filename, 'rb'))
     return loaded_model
 
-def load_label_encoder():
-    filename = "finalized_label_encoder.sav"
+def load_label_encoder_location():
+    filename = "finalized_label_encoder_location.sav"
     return pickle.load(open(filename, 'rb'))
+
+def load_label_encoder_sector():
+    filename = "finalized_label_encoder_sector.sav"
+    return pickle.load(open(filename, 'rb'))
+
+def load_label_encoder_title():
+    filename = "finalized_label_encoder_title.sav"
+    return pickle.load(open(filename, 'rb'))
+
+enc_sector, enc_location, enc_title = load_label_encoder_sector(), load_label_encoder_location(), load_label_encoder_title()
+clf = load_clf_model()
 
 st.set_page_config(layout="wide")
 
@@ -87,6 +98,30 @@ skill_set = st.sidebar.multiselect('Skills', params['skills'])
 job_title_sim = st.sidebar.selectbox('Choose Job Title:', params['job_title_sim'])
 predict_btn = st.sidebar.button('Predict')
 
-enc = load_label_encoder()
-# print(list(enc.inverse_transform([7])))
-# print(list(enc.transform(['machine learning engineer'])))
+
+test_data = pd.DataFrame({
+    'Sector' : list(enc_sector.transform([sector])),
+    'Job Location' : list(enc_location.transform([job_location])),
+    'Python' : [1 if 'Python' in skill_set else 0],
+    'spark' : [1 if 'Python' in skill_set else 0],
+    'aws' : [1 if 'Python' in skill_set else 0], 
+    'excel' : [1 if 'Python' in skill_set else 0],
+    'sql' : [1 if 'Python' in skill_set else 0],
+    'sas' : [1 if 'Python' in skill_set else 0],
+    'keras': [1 if 'Python' in skill_set else 0],
+    'pytorch': [1 if 'Python' in skill_set else 0],
+    'scikit' : [1 if 'Python' in skill_set else 0],
+    'tensor' : [1 if 'Python' in skill_set else 0],
+    'hadoop' : [1 if 'Python' in skill_set else 0],
+    'tableau' : [1 if 'Python' in skill_set else 0],
+    'bi' : [1 if 'Python' in skill_set else 0],
+    'flink' : [1 if 'Python' in skill_set else 0],
+    'mongo' : [1 if 'Python' in skill_set else 0],
+    'google_an' : [1 if 'Python' in skill_set else 0],
+    'job_title_sim' : list(enc_title.transform([job_title_sim]))
+})
+
+if predict_btn:
+    pred = clf.predict(test_data)
+    if pred and len(pred) > 0:
+        st.sidebar.write("Prediction result: You can expect a salary of $" + str(round(pred[0]))+ "k")
