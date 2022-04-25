@@ -30,9 +30,9 @@ st.write("""
 """)
 
 st.markdown("""
-This app predicts the salary for different datascience roles in US
+Welcome! Here we provide some valuable insights into salaries for Data Science roles nationwide. Our visualizations will help you compare salaries across different industries, locations, and companies while our predictive salary tool will help you determine what you can expect to earn based on your skills!
 * **Python libraries:** streamlit, pandas, sklearn
-* **Data source:** [data-scientist-salary](https://www.kaggle.com/datasets/sulianova/cardiovascular-disease-dataset)
+* **Data source:** [data-scientist-salary](https://www.kaggle.com/datasets/nikhilbhathi/data-scientist-salary-us-glassdoor)
 """)
 
 st.sidebar.write("""
