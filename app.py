@@ -30,7 +30,7 @@ st.write("""
 """)
 
 st.markdown("""
-This app predicts <needs to be added>
+This app predicts the salary for different datascience roles in US
 * **Python libraries:** streamlit, pandas, sklearn
 * **Data source:** [data-scientist-salary](https://www.kaggle.com/datasets/sulianova/cardiovascular-disease-dataset)
 """)
@@ -103,25 +103,25 @@ test_data = pd.DataFrame({
     'Sector' : list(enc_sector.transform([sector])),
     'Job Location' : list(enc_location.transform([job_location])),
     'Python' : [1 if 'Python' in skill_set else 0],
-    'spark' : [1 if 'Python' in skill_set else 0],
-    'aws' : [1 if 'Python' in skill_set else 0], 
-    'excel' : [1 if 'Python' in skill_set else 0],
-    'sql' : [1 if 'Python' in skill_set else 0],
-    'sas' : [1 if 'Python' in skill_set else 0],
-    'keras': [1 if 'Python' in skill_set else 0],
-    'pytorch': [1 if 'Python' in skill_set else 0],
-    'scikit' : [1 if 'Python' in skill_set else 0],
-    'tensor' : [1 if 'Python' in skill_set else 0],
-    'hadoop' : [1 if 'Python' in skill_set else 0],
-    'tableau' : [1 if 'Python' in skill_set else 0],
-    'bi' : [1 if 'Python' in skill_set else 0],
-    'flink' : [1 if 'Python' in skill_set else 0],
-    'mongo' : [1 if 'Python' in skill_set else 0],
-    'google_an' : [1 if 'Python' in skill_set else 0],
+    'spark' : [1 if 'spark' in skill_set else 0],
+    'aws' : [1 if 'aws' in skill_set else 0], 
+    'excel' : [1 if 'excel' in skill_set else 0],
+    'sql' : [1 if 'sql' in skill_set else 0],
+    'sas' : [1 if 'sas' in skill_set else 0],
+    'keras': [1 if 'keras' in skill_set else 0],
+    'pytorch': [1 if 'pytorch' in skill_set else 0],
+    'scikit' : [1 if 'scikit' in skill_set else 0],
+    'tensor' : [1 if 'tensor' in skill_set else 0],
+    'hadoop' : [1 if 'hadoop' in skill_set else 0],
+    'tableau' : [1 if 'tableau' in skill_set else 0],
+    'bi' : [1 if 'bi' in skill_set else 0],
+    'flink' : [1 if 'flink' in skill_set else 0],
+    'mongo' : [1 if 'mongo' in skill_set else 0],
+    'google_an' : [1 if 'google_an' in skill_set else 0],
     'job_title_sim' : list(enc_title.transform([job_title_sim]))
 })
 
 if predict_btn:
     pred = clf.predict(test_data)
     if pred and len(pred) > 0:
-        st.sidebar.write("Prediction result: You can expect a salary of $" + str(round(pred[0]))+ "k")
+        st.sidebar.write("Prediction result: You can expect a salary of $" + str(round(pred[0], 2))+ "k")
