@@ -1,3 +1,4 @@
+from tkinter import font
 import streamlit as st
 import altair as alt
 import seaborn as sns
@@ -142,22 +143,26 @@ revenue_chart = alt.Chart(df, title = 'Number of Companies Per Revenue Bracket')
     alt.Y('count()', title = 'Company Count'),
     tooltip=['count():O']
 ).configure_axis(
-    titleFontSize=16
+    titleFontSize=8
 ).configure_title(
-    fontSize=24
+    fontSize=12
 ).properties(
-     width=900,
-    height=700
+     width=450,
+    height=350
 ).interactive()
 
-st.write(revenue_chart)
+# st.write(revenue_chart)
 
 df_industry = df['Industry'].value_counts()
 top_5 = df_industry[0:5]
 
 fig1, ax1 = plt.subplots()
 ax1.pie(top_5, labels=top_5.index, autopct='%1.1f%%',)
+# ax1.title.set_text('Industries With The Most Available Jobs')
 
-st.header("Industries With The Most Available Jobs")
-st.pyplot(fig1)
+# st.pyplot(fig1)
 
+col1, col2 =  st.columns(2)
+col1.write(revenue_chart)
+col2.write(""" ###### Industries With The Most Available Jobs  """)
+col2.pyplot(fig1)
