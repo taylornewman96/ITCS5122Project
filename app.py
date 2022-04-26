@@ -1,4 +1,7 @@
 import streamlit as st
+import altair as alt
+import seaborn as sns
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import pickle
@@ -19,6 +22,10 @@ def load_label_encoder_sector():
 def load_label_encoder_title():
     filename = "finalized_label_encoder_title.sav"
     return pickle.load(open(filename, 'rb'))
+
+def load_chart_data():
+    df = pd.read_csv('data_cleaned_2021.csv')
+    return df
 
 enc_sector, enc_location, enc_title = load_label_encoder_sector(), load_label_encoder_location(), load_label_encoder_title()
 clf = load_clf_model()
@@ -125,3 +132,32 @@ if predict_btn:
     pred = clf.predict(test_data)
     if pred and len(pred) > 0:
         st.sidebar.write("Prediction result: You can expect a salary of $" + str(round(pred[0], 2))+ "k")
+
+df = pd.DataFrame(load_chart_data())
+
+df = df[df.Revenue != 'Unknown / Non-Applicable']
+
+revenue_chart = alt.Chart(df, title = 'Number of Companies Per Revenue Bracket').mark_bar().encode(
+    alt.X('Revenue'),
+    alt.Y('count()', title = 'Company Count'),
+    tooltip=['count():O']
+).configure_axis(
+    titleFontSize=16
+).configure_title(
+    fontSize=24
+).properties(
+     width=900,
+    height=700
+).interactive()
+
+st.write(revenue_chart)
+
+df_industry = df['Industry'].value_counts()
+top_5 = df_industry[0:5]
+
+fig1, ax1 = plt.subplots()
+ax1.pie(top_5, labels=top_5.index, autopct='%1.1f%%',)
+
+st.header("Industries With The Most Available Jobs")
+st.pyplot(fig1)
+
