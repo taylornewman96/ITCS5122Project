@@ -10,7 +10,7 @@ import numpy as np
 import pickle
 from vega_datasets import data
 
-matplotlib.use("Qt4Agg")
+# matplotlib.use("Qt4Agg")
 
 
 def load_clf_model():
@@ -142,25 +142,28 @@ if predict_btn:
 
 
 df = pd.DataFrame(load_chart_data())
-print(df.head(5))
 
 #map
-states = alt.topo_feature(data.us_10m.url, 'states')
-
 df_states = pd.DataFrame(df['Job Location'].value_counts())
 #df_states['states'] = df_states.index 
 
-map = alt.Chart(states).mark_geoshape().encode(
-    color = 'Job Location:Q',
-    tooltip=['id:O', 'Job Location:Q']
+states = alt.topo_feature(data.us_10m.url, 'states')
+source = data.income.url
+
+map = alt.Chart(source).mark_geoshape().encode(
+    shape='geo:G',
+    color='total:Q',
+    tooltip=['name:N', 'total:Q'],
 ).transform_lookup(
-    lookup='index',
-    from_=alt.LookupData(df_states, 'index', ['Job Location']),
+    lookup='id',
+    from_=alt.LookupData(data=states, key='id'),
+    as_='geo'
+).properties(
+    title="US Income by State",
+    width=1000,
+    height=400,
 ).project(
     type='albersUsa'
-).properties(
-    width=1000,
-    height=500
 )
 st.write(map)
 
