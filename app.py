@@ -159,7 +159,7 @@ map = alt.Chart(source).mark_geoshape().encode(
     from_=alt.LookupData(data=states, key='id'),
     as_='geo'
 ).properties(
-    title="US Income by State",
+    title="US Revenue by State",
     width=1000,
     height=400,
 ).project(
