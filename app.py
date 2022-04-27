@@ -10,23 +10,28 @@ import numpy as np
 import pickle
 from vega_datasets import data
 
+# load clf model
 def load_clf_model():
     filename = "finalized_model_clf.sav"
     loaded_model = pickle.load(open(filename, 'rb'))
     return loaded_model
 
+# encoder for location
 def load_label_encoder_location():
     filename = "finalized_label_encoder_location.sav"
     return pickle.load(open(filename, 'rb'))
 
+# encoder for sector
 def load_label_encoder_sector():
     filename = "finalized_label_encoder_sector.sav"
     return pickle.load(open(filename, 'rb'))
 
+# encoder for title
 def load_label_encoder_title():
     filename = "finalized_label_encoder_title.sav"
     return pickle.load(open(filename, 'rb'))
 
+# load chart data
 def load_chart_data():
     df = pd.read_csv('data_cleaned_2021.csv')
     return df
@@ -101,7 +106,7 @@ params = {
         'machine learning engineer',
         'other scientist']
 }   
-
+# input widgets
 name = st.sidebar.text_input('Enter Name:')
 sector = st.sidebar.selectbox('Choose Sector:', params['sector'])
 job_location = st.sidebar.selectbox('Choose Job Location:', params["job_location"])
@@ -163,8 +168,9 @@ map = alt.Chart(source).mark_geoshape().encode(
 st.write(map)
 
 
-
+# Create two columns
 col1, col2 =  st.columns(2)
+
 # Revenue chart
 df = df[df.Revenue != 'Unknown / Non-Applicable']
 
@@ -211,7 +217,7 @@ top10_max_job_posting_chart = alt.Chart(top10_max_job_posting_df, title = 'Top 1
 ).interactive()
 col2.write(top10_max_job_posting_chart)
 
-# Top 10 states with avg annual minimal and maximal salaries
+# Top 10 states with avg annual minimum and maximum salaries
 sort_index = df["Location"].value_counts().sort_values(ascending=False).index
 loc_index = df.groupby("Location")[["Lower Salary","Upper Salary"]].mean().sort_values("Location",ascending=False)
 loc_index = loc_index.reset_index()
