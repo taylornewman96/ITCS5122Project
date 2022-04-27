@@ -143,12 +143,19 @@ if predict_btn:
 
 df = pd.DataFrame(load_chart_data())
 print(df.head(5))
+
 #map
 states = alt.topo_feature(data.us_10m.url, 'states')
 
-map = alt.Chart(states).mark_geoshape().encode().transform_lookup(
+df_states = pd.DataFrame(df['Job Location'].value_counts())
+#df_states['states'] = df_states.index 
+
+map = alt.Chart(states).mark_geoshape().encode(
+    color = 'Job Location:Q',
+    tooltip=['id:O', 'Job Location:Q']
+).transform_lookup(
     lookup='index',
-    from_=alt.LookupData(df, 'index', list(df.columns))
+    from_=alt.LookupData(df_states, 'index', ['Job Location']),
 ).project(
     type='albersUsa'
 ).properties(
@@ -156,6 +163,8 @@ map = alt.Chart(states).mark_geoshape().encode().transform_lookup(
     height=500
 )
 st.write(map)
+
+
 
 col1, col2 =  st.columns(2)
 # revenue chart
